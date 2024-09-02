@@ -138,7 +138,7 @@ fun HomeScreen(viewModel: HomeScreenViewModel) {
             Icon(
                 painter = painterResource(id = R.drawable.baseline_add_24),
                 contentDescription = "Add a drink",
-                modifier = Modifier.size(24.dp)
+                modifier = Modifier.size(36.dp)
             )
         }
     }
