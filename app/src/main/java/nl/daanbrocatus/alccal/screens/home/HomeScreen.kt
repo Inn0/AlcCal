@@ -136,7 +136,7 @@ fun HomeScreen(viewModel: HomeScreenViewModel) {
                 .padding(16.dp)
         ) {
             Icon(
-                painter = painterResource(id = R.drawable.baseline_plus_one_24),
+                painter = painterResource(id = R.drawable.baseline_add_24),
                 contentDescription = "Add a drink",
                 modifier = Modifier.size(24.dp)
             )
