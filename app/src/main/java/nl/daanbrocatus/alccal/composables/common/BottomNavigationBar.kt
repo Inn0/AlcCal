@@ -1,4 +1,4 @@
-package nl.daanbrocatus.alccal.common
+package nl.daanbrocatus.alccal.composables.common
 
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
@@ -9,6 +9,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.res.painterResource
 import androidx.navigation.NavController
 import androidx.navigation.compose.currentBackStackEntryAsState
+import nl.daanbrocatus.alccal.common.BottomNavigationItem
 
 @Composable
 fun BottomNavigationBar(navController: NavController) {

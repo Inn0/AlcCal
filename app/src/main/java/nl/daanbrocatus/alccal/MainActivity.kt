@@ -13,7 +13,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.room.Room
-import nl.daanbrocatus.alccal.common.BottomNavigationBar
+import nl.daanbrocatus.alccal.composables.common.BottomNavigationBar
 import nl.daanbrocatus.alccal.common.BottomNavigationItem
 import nl.daanbrocatus.alccal.database.AppDatabase
 import nl.daanbrocatus.alccal.database.DateTimeRepository

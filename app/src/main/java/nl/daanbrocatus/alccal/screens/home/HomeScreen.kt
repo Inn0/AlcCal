@@ -1,11 +1,6 @@
 package nl.daanbrocatus.alccal.screens.home
 
 import android.widget.Toast
-import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.core.tween
-import androidx.compose.animation.fadeOut
-import androidx.compose.animation.shrinkVertically
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -18,31 +13,22 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.Card
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.SwipeToDismiss
-import androidx.compose.material3.SwipeToDismissBoxState
-import androidx.compose.material3.SwipeToDismissBoxValue
 import androidx.compose.material3.Text
-import androidx.compose.material3.rememberSwipeToDismissBoxState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import kotlinx.coroutines.delay
 import nl.daanbrocatus.alccal.R
+import nl.daanbrocatus.alccal.composables.common.SwipeToDeleteContainer
 
 @Composable
 fun HomeScreen(viewModel: HomeScreenViewModel) {
@@ -109,6 +95,8 @@ fun HomeScreen(viewModel: HomeScreenViewModel) {
                             viewModel.deleteDateTime(item)
                         }
                     ) { dateTime ->
+                        val date = dateTime.timestamp.substring(0, 10)
+                        val time = dateTime.timestamp.substring(11, 19)
                         Card(
                             modifier = Modifier
                                 .fillMaxWidth()
@@ -121,7 +109,22 @@ fun HomeScreen(viewModel: HomeScreenViewModel) {
                                     tint = MaterialTheme.colorScheme.primary,
                                     modifier = Modifier.padding(8.dp)
                                 )
-                                Text(text = dateTime.timestamp)
+                                Row(
+                                    modifier = Modifier.fillMaxWidth(),
+                                    horizontalArrangement = Arrangement.SpaceBetween,
+                                    verticalAlignment = Alignment.CenterVertically
+                                ) {
+                                    Text(
+                                        text = time,
+                                        style = MaterialTheme.typography.titleMedium
+                                    )
+                                    Text(
+                                        text = date,
+                                        style = MaterialTheme.typography.labelMedium,
+                                        modifier = Modifier
+                                            .padding(end = 8.dp)
+                                    )
+                                }
                             }
                         }
                     }
@@ -134,6 +137,7 @@ fun HomeScreen(viewModel: HomeScreenViewModel) {
             modifier = Modifier
                 .align(Alignment.BottomEnd)
                 .padding(16.dp)
+                .size(64.dp)
         ) {
             Icon(
                 painter = painterResource(id = R.drawable.baseline_add_24),
@@ -141,73 +145,5 @@ fun HomeScreen(viewModel: HomeScreenViewModel) {
                 modifier = Modifier.size(36.dp)
             )
         }
-    }
-}
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun <T> SwipeToDeleteContainer(
-    item: T,
-    onDelete: (T) -> Unit,
-    animationDuration: Int = 500,
-    content: @Composable (T) -> Unit
-) {
-    var isRemoved by remember { mutableStateOf(false) }
-    val state = rememberSwipeToDismissBoxState()
-    LaunchedEffect(isRemoved) {
-        if (isRemoved) {
-            delay(animationDuration.toLong())
-            onDelete(item)
-        }
-    }
-
-    SwipeToDismiss(
-        state = state,
-        background = { DeleteBackground(swipeDismissState = state) },
-        dismissContent = {
-            AnimatedVisibility(
-                visible = !isRemoved,
-                exit = shrinkVertically(
-                    animationSpec = tween(durationMillis = animationDuration),
-                    shrinkTowards = Alignment.Top
-                ) + fadeOut()
-            ) {
-                content(item)
-            }
-        },
-        directions = setOf(SwipeToDismissBoxValue.EndToStart)
-    )
-
-    LaunchedEffect(state.dismissDirection) {
-        if (state.dismissDirection == SwipeToDismissBoxValue.EndToStart) {
-            isRemoved = true
-        }
-    }
-}
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun DeleteBackground(
-    swipeDismissState: SwipeToDismissBoxState
-) {
-    val color = if (swipeDismissState.dismissDirection == SwipeToDismissBoxValue.EndToStart) {
-        Color.Red
-    } else Color.Transparent
-
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(color),
-        contentAlignment = Alignment.CenterEnd
-    ) {
-        Row {
-            Icon(
-                painter = painterResource(R.drawable.baseline_no_drinks_24),
-                contentDescription = null,
-                tint = Color.White,
-                modifier = Modifier.padding(8.dp)
-            )
-        }
-        
     }
 }
