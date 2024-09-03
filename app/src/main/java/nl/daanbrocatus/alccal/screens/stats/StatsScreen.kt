@@ -1,6 +1,7 @@
 package nl.daanbrocatus.alccal.screens.stats
 
 import android.util.Log
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -9,8 +10,10 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -21,6 +24,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
 
 @Composable
@@ -43,8 +47,16 @@ fun StatsScreen(viewModel: StatsScreenViewModel) {
             .fillMaxSize()
             .padding(8.dp)
     ) {
+        Text(
+            text = "Statistics",
+            fontStyle = MaterialTheme.typography.displayMedium.fontStyle,
+            fontSize = MaterialTheme.typography.displayMedium.fontSize,
+            fontWeight = MaterialTheme.typography.displayMedium.fontWeight,
+            modifier = Modifier.padding(8.dp)
+        )
         Row(
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier
+                .fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
@@ -80,12 +92,18 @@ fun <T> DropdownSelector(
 ) {
     var isDropdownExpanded by remember { mutableStateOf(false) }
 
-    Box {
+    Box(
+        modifier = Modifier
+            .clip(RoundedCornerShape(4.dp))
+            .background(MaterialTheme.colorScheme.primaryContainer)
+            .clickable { isDropdownExpanded = true }
+    ) {
         Text(
             text = "$label: $selectedItem",
+            fontStyle = MaterialTheme.typography.bodyLarge.fontStyle,
+            color = MaterialTheme.colorScheme.onPrimaryContainer,
             modifier = Modifier
-                .padding(8.dp)
-                .clickable { isDropdownExpanded = true }
+                .padding(12.dp)
         )
 
         DropdownMenu(
