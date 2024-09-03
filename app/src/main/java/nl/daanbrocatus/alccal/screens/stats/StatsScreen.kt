@@ -1,8 +1,6 @@
 package nl.daanbrocatus.alccal.screens.stats
 
 import android.util.Log
-import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -10,24 +8,22 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.DropdownMenu
-import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import nl.daanbrocatus.alccal.composables.common.DropdownSelector
 
 @Composable
 fun StatsScreen(viewModel: StatsScreenViewModel) {
@@ -56,19 +52,20 @@ fun StatsScreen(viewModel: StatsScreenViewModel) {
         )
         Row(
             modifier = Modifier
-                .fillMaxWidth(),
+                .fillMaxWidth()
+                .padding(4.dp),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
             DropdownSelector(
-                label = "Select Month",
+                label = "Month",
                 selectedItem = selectedMonth,
                 items = months,
                 onItemSelected = { month -> viewModel.setSelectedMonth(month) }
             )
 
             DropdownSelector(
-                label = "Select Year",
+                label = "Year",
                 selectedItem = selectedYear,
                 items = years,
                 onItemSelected = { year -> viewModel.setSelectedYear(year) }
@@ -78,54 +75,44 @@ fun StatsScreen(viewModel: StatsScreenViewModel) {
         LazyColumn(modifier = Modifier.fillMaxSize()) {
             items(timestampsPerDay.keys.sorted()) { day ->
                 val count = timestampsPerDay[day] ?: 0
-                Text(
-                    text = "Day $day: $count",
-                    modifier = Modifier
-                        .padding(8.dp)
-                        .fillMaxWidth()
-                )
+                DayCard(day = day, count = count)
             }
         }
     }
 }
 
 @Composable
-fun <T> DropdownSelector(
-    label: String,
-    selectedItem: T,
-    items: List<T>,
-    onItemSelected: (T) -> Unit
-) {
-    var isDropdownExpanded by remember { mutableStateOf(false) }
-
-    Box(
+fun DayCard(day: Int, count: Int) {
+    Card(
         modifier = Modifier
-            .clip(RoundedCornerShape(4.dp))
-            .background(MaterialTheme.colorScheme.primaryContainer)
-            .clickable { isDropdownExpanded = true }
+            .fillMaxWidth()
+            .padding(4.dp)
     ) {
-        Text(
-            text = "$label: $selectedItem",
-            fontStyle = MaterialTheme.typography.bodyLarge.fontStyle,
-            color = MaterialTheme.colorScheme.onPrimaryContainer,
+        Row(
             modifier = Modifier
-                .padding(12.dp)
-        )
-
-        DropdownMenu(
-            expanded = isDropdownExpanded,
-            onDismissRequest = { isDropdownExpanded = false }
         ) {
-            items.forEach { item ->
-                DropdownMenuItem(
-                    text = { Text(text = item.toString()) },
-                    onClick = {
-                        onItemSelected(item)
-                        isDropdownExpanded = false
-                    }
-                )
+            Card(
+                colors = CardDefaults.cardColors()
+                    .copy(containerColor = MaterialTheme.colorScheme.primary),
+                modifier = Modifier
+                    .size(48.dp)
+            ) {
+                Box(
+                    modifier = Modifier.fillMaxSize(),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Text(
+                        text = day.toString(),
+                        color = MaterialTheme.colorScheme.onPrimary,
+                        fontWeight = FontWeight.Bold,
+                    )
+                }
             }
+
+            Text(
+                text = count.toString(),
+                modifier = Modifier
+            )
         }
     }
 }
-
