@@ -3,9 +3,12 @@ package nl.daanbrocatus.alccal.screens.stats
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import nl.daanbrocatus.alccal.database.DateTimeEntity
 import nl.daanbrocatus.alccal.database.DateTimeRepository
@@ -23,13 +26,21 @@ class StatsScreenViewModel(private val repository: DateTimeRepository) : ViewMod
     private val _selectedMonth = MutableStateFlow(LocalDate.now().monthValue)
     val selectedMonth: StateFlow<Int> = _selectedMonth.asStateFlow()
 
-    val filteredDateTimes = _allDateTimes.map { dateTimes ->
+    val filteredDateTimes: StateFlow<List<DateTimeEntity>> = combine(
+        _allDateTimes,
+        _selectedYear,
+        _selectedMonth
+    ) { dateTimes, selectedYear, selectedMonth ->
         val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
         dateTimes.filter { dateTime ->
             val localDate = LocalDate.parse(dateTime.timestamp, formatter)
-            localDate.year == _selectedYear.value && localDate.monthValue == _selectedMonth.value
+            localDate.year == selectedYear && localDate.monthValue == selectedMonth
         }
-    }
+    }.stateIn(
+        viewModelScope,
+        SharingStarted.Lazily,
+        emptyList()
+    )
 
     init {
         viewModelScope.launch {
