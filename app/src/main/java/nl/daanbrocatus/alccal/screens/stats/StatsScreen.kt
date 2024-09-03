@@ -10,6 +10,8 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
@@ -30,13 +32,11 @@ import androidx.compose.ui.unit.dp
 @Composable
 fun StatsScreen(viewModel: StatsScreenViewModel) {
     val dateTimeList by viewModel.filteredDateTimes.collectAsState(emptyList())
+    val timestampsPerDay by viewModel.timestampsPerDay.collectAsState()
     val selectedYear by viewModel.selectedYear.collectAsState()
     val selectedMonth by viewModel.selectedMonth.collectAsState()
     val years = (2024..2030).toList()
     val months = (1..12).toList()
-
-    var isMonthDropdownExpanded by remember { mutableStateOf(false) }
-    var isYearDropdownExpanded by remember { mutableStateOf(false) }
 
     LaunchedEffect(dateTimeList) {
         Log.e("StatsScreen", "dateTimeList updated: $dateTimeList")
@@ -75,9 +75,15 @@ fun StatsScreen(viewModel: StatsScreenViewModel) {
             )
         }
 
-        Column(modifier = Modifier.fillMaxSize()) {
-            dateTimeList.forEach { dateTimeEntity ->
-                Text(text = dateTimeEntity.timestamp)
+        LazyColumn(modifier = Modifier.fillMaxSize()) {
+            items(timestampsPerDay.keys.sorted()) { day ->
+                val count = timestampsPerDay[day] ?: 0
+                Text(
+                    text = "Day $day: $count",
+                    modifier = Modifier
+                        .padding(8.dp)
+                        .fillMaxWidth()
+                )
             }
         }
     }

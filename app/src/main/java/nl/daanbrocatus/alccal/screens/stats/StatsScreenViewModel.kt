@@ -13,6 +13,7 @@ import kotlinx.coroutines.launch
 import nl.daanbrocatus.alccal.database.DateTimeEntity
 import nl.daanbrocatus.alccal.database.DateTimeRepository
 import java.time.LocalDate
+import java.time.YearMonth
 import java.time.format.DateTimeFormatter
 
 class StatsScreenViewModel(private val repository: DateTimeRepository) : ViewModel() {
@@ -41,6 +42,23 @@ class StatsScreenViewModel(private val repository: DateTimeRepository) : ViewMod
         SharingStarted.Lazily,
         emptyList()
     )
+
+    val timestampsPerDay = combine(_allDateTimes, selectedYear, selectedMonth) { dateTimes, year, month ->
+        val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
+        val daysInMonth = YearMonth.of(year, month).lengthOfMonth()
+
+        val dateCounts = (1..daysInMonth).associateWith { 0 }.toMutableMap()
+
+        dateTimes.forEach { dateTime ->
+            val localDate = LocalDate.parse(dateTime.timestamp, formatter)
+            if (localDate.year == year && localDate.monthValue == month) {
+                val day = localDate.dayOfMonth
+                dateCounts[day] = dateCounts.getOrDefault(day, 0) + 1
+            }
+        }
+
+        dateCounts.toMap()
+    }.stateIn(viewModelScope, SharingStarted.Lazily, emptyMap())
 
     init {
         viewModelScope.launch {
