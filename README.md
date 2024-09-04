@@ -16,11 +16,20 @@ Repository for the AlcCal project. AlcCal is a tracker app you can use to track 
 4. Et voilá!
 
 ### To create a new release 🛠️
+#### Debug APK
 1. Clone the main branch on your machine.
 2. Open the project in [Android Studio](https://developer.android.com/studio).
 3. Build the `.apk`. (Build > Build App Bundle(s) / APK(s) > Build APK(s))
 4. Locate the `.apk` file, Android Studio should prompt you for the location.
-5. Upload the `.apk` as a new release on GitHub with a new version tag. 
+5. Upload the `.apk` as a new release on GitHub with a new version tag.
+
+#### Release APK
+1. Make sure you have the keystore file (`alccal-keystore.jks`) on your machine. (and you know the password)
+2. Clone the main branch on your machine.
+3. Open the project in [Android Studio](https://developer.android.com/studio).
+4. Build the `.apk`. (Build > Generate Signed Bundle / APK > Select APK > Provide the keystore file and appropriate passwords (key is `key0`) > Click next > Select `release` > Create)
+5. Locate the `.apk` file, Android Studio should prompt you for the location.
+6. Upload the `.apk` as a new release on GitHub with a new version tag.
 
 ## Project tracking 🗓️
 - [Kanban board](https://github.com/users/Inn0/projects/4/views/1)
