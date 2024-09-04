@@ -52,7 +52,7 @@ fun <T> DropdownSelector(
         ) {
             val annotatedString = buildAnnotatedString {
                 append("$label: ")
-                withStyle(style = SpanStyle(fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.primary)) {
+                withStyle(style = SpanStyle(fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.onPrimaryContainer)) {
                     append(selectedItem.toString())
                 }
             }
