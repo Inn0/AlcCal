@@ -21,7 +21,7 @@ import nl.daanbrocatus.alccal.screens.home.HomeScreen
 import nl.daanbrocatus.alccal.screens.SettingsScreen
 import nl.daanbrocatus.alccal.screens.stats.StatsScreen
 import nl.daanbrocatus.alccal.screens.home.HomeScreenViewModel
-import nl.daanbrocatus.alccal.screens.stats.StatsScreenViewModel
+import nl.daanbrocatus.alccal.screens.stats.MonthlyScreenViewModel
 import nl.daanbrocatus.alccal.ui.theme.AlcCalTheme
 
 class MainActivity : ComponentActivity() {
@@ -57,7 +57,7 @@ class MainActivity : ComponentActivity() {
                         startDestination = BottomNavigationItem.items[1].title,
                         modifier = Modifier.padding(innerPadding)
                     ) {
-                        composable(BottomNavigationItem.items[0].title) { StatsScreen(viewModel = StatsScreenViewModel(dateTimeRepository)) }
+                        composable(BottomNavigationItem.items[0].title) { StatsScreen(viewModel = MonthlyScreenViewModel(dateTimeRepository)) }
                         composable(BottomNavigationItem.items[1].title) { HomeScreen(viewModel = HomeScreenViewModel(dateTimeRepository)) }
                         composable(BottomNavigationItem.items[2].title) { SettingsScreen() }
                     }

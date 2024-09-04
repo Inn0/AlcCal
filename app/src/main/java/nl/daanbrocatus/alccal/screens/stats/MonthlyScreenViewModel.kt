@@ -7,7 +7,6 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import nl.daanbrocatus.alccal.database.DateTimeEntity
@@ -16,32 +15,15 @@ import java.time.LocalDate
 import java.time.YearMonth
 import java.time.format.DateTimeFormatter
 
-class StatsScreenViewModel(private val repository: DateTimeRepository) : ViewModel() {
+class MonthlyScreenViewModel(private val repository: DateTimeRepository) : ViewModel() {
 
     private val _allDateTimes = MutableStateFlow<List<DateTimeEntity>>(emptyList())
-    val allDateTimes: StateFlow<List<DateTimeEntity>> = _allDateTimes.asStateFlow()
 
     private val _selectedYear = MutableStateFlow(LocalDate.now().year)
     val selectedYear: StateFlow<Int> = _selectedYear.asStateFlow()
 
     private val _selectedMonth = MutableStateFlow(LocalDate.now().monthValue)
     val selectedMonth: StateFlow<Int> = _selectedMonth.asStateFlow()
-
-    val filteredDateTimes: StateFlow<List<DateTimeEntity>> = combine(
-        _allDateTimes,
-        _selectedYear,
-        _selectedMonth
-    ) { dateTimes, selectedYear, selectedMonth ->
-        val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
-        dateTimes.filter { dateTime ->
-            val localDate = LocalDate.parse(dateTime.timestamp, formatter)
-            localDate.year == selectedYear && localDate.monthValue == selectedMonth
-        }
-    }.stateIn(
-        viewModelScope,
-        SharingStarted.Lazily,
-        emptyList()
-    )
 
     val timestampsPerDay = combine(_allDateTimes, selectedYear, selectedMonth) { dateTimes, year, month ->
         val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")

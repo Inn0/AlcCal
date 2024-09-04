@@ -13,9 +13,9 @@ data class BottomNavigationItem(
     companion object {
         val items = listOf(
             BottomNavigationItem(
-                title = "Stats",
-                selectedIcon = R.drawable.baseline_insert_chart_24,
-                unselectedIcon = R.drawable.outline_insert_chart_24
+                title = "Monthly",
+                selectedIcon = R.drawable.baseline_calendar_month_24,
+                unselectedIcon = R.drawable.outline_calendar_month_24
             ),
             BottomNavigationItem(
                 title = "Home",
