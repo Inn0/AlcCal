@@ -32,7 +32,7 @@ import nl.daanbrocatus.alccal.R
 import nl.daanbrocatus.alccal.composables.common.DropdownSelector
 
 @Composable
-fun StatsScreen(viewModel: StatsScreenViewModel) {
+fun StatsScreen(viewModel: MonthlyScreenViewModel) {
     val timestampsPerDay by viewModel.timestampsPerDay.collectAsState()
     val selectedYear by viewModel.selectedYear.collectAsState()
     val selectedMonth by viewModel.selectedMonth.collectAsState()
