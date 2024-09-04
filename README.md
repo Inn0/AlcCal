@@ -2,12 +2,6 @@
 
 Repository for the AlcCal project. AlcCal is a tracker app you can use to track alcohol consumption on a per-drink basis and gain insights about said consumption.
 
-## Technologies used 🤖
-- [Kotlin](https://kotlinlang.org/)
-- [Jetpack Compose](https://developer.android.com/compose)
-- [Room](https://developer.android.com/jetpack/androidx/releases/room)
-- [Android Studio](https://developer.android.com/studio)
-
 ## Installation guide 📖
 ### To install the latest version 📲
 1. Go to the [releases section](https://github.com/Inn0/AlcCal/releases) of the repository.
@@ -33,6 +27,12 @@ Repository for the AlcCal project. AlcCal is a tracker app you can use to track 
 
 ## Project tracking 🗓️
 - [Kanban board](https://github.com/users/Inn0/projects/4/views/1)
+
+## Technologies used 🤖
+- [Kotlin](https://kotlinlang.org/)
+- [Jetpack Compose](https://developer.android.com/compose)
+- [Room](https://developer.android.com/jetpack/androidx/releases/room)
+- [Android Studio](https://developer.android.com/studio)
 
 ## Credit & contact 📞
 - Project developed by [Daan Brocatus](mailto:daan.brocatus@outlook.com)
