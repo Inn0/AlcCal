@@ -27,6 +27,7 @@ Repository for the AlcCal project. AlcCal is a tracker app you can use to track 
 
 ## Project tracking 🗓️
 - [Kanban board](https://github.com/users/Inn0/projects/4/views/1)
+- [Issues still to be implemented](https://github.com/Inn0/AlcCal/issues)
 
 ## Technologies used 🤖
 - [Kotlin](https://kotlinlang.org/)
