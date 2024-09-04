@@ -7,7 +7,7 @@ class DateTimeRepository(private val dateTimeDao: DateTimeDao) {
         dateTimeDao.insert(DateTimeEntity(timestamp = timestamp))
     }
 
-    suspend fun getAllDateTimes(): Flow<List<DateTimeEntity>> {
+    fun getAllDateTimes(): Flow<List<DateTimeEntity>> {
         return dateTimeDao.getAll()
     }
 

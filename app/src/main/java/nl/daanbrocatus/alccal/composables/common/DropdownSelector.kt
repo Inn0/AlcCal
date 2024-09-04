@@ -52,7 +52,7 @@ fun <T> DropdownSelector(
         ) {
             val annotatedString = buildAnnotatedString {
                 append("$label: ")
-                withStyle(style = SpanStyle(fontWeight = FontWeight.Bold)) {
+                withStyle(style = SpanStyle(fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.primary)) {
                     append(selectedItem.toString())
                 }
             }
@@ -66,7 +66,7 @@ fun <T> DropdownSelector(
             Icon(
                 imageVector = Icons.Filled.ArrowDropDown,
                 contentDescription = null,
-                tint = MaterialTheme.colorScheme.onPrimaryContainer,
+                tint = MaterialTheme.colorScheme.primary,
                 modifier = Modifier
                     .rotate(if (isDropdownExpanded) 0f else 270f)
                     .size(28.dp)
