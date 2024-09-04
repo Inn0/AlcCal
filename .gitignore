@@ -16,4 +16,4 @@
 local.properties
 .idea
 *.apk
-/release
+app/release
