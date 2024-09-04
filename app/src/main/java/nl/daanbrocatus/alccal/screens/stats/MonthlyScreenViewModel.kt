@@ -17,6 +17,8 @@ import java.time.format.DateTimeFormatter
 
 class MonthlyScreenViewModel(private val repository: DateTimeRepository) : ViewModel() {
 
+    private val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
+
     private val _allDateTimes = MutableStateFlow<List<DateTimeEntity>>(emptyList())
 
     private val _selectedYear = MutableStateFlow(LocalDate.now().year)
@@ -26,7 +28,6 @@ class MonthlyScreenViewModel(private val repository: DateTimeRepository) : ViewM
     val selectedMonth: StateFlow<Int> = _selectedMonth.asStateFlow()
 
     val timestampsPerDay = combine(_allDateTimes, selectedYear, selectedMonth) { dateTimes, year, month ->
-        val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
         val daysInMonth = YearMonth.of(year, month).lengthOfMonth()
 
         val dateCounts = (1..daysInMonth).associateWith { 0 }.toMutableMap()
@@ -56,5 +57,35 @@ class MonthlyScreenViewModel(private val repository: DateTimeRepository) : ViewM
 
     fun setSelectedMonth(month: Int) {
         _selectedMonth.value = month
+    }
+
+    fun addDateTimeToDay(day: Int) {
+        val dateTime = LocalDate.of(_selectedYear.value, _selectedMonth.value, day).atStartOfDay()
+        val timestamp = dateTime.format(formatter)
+
+        viewModelScope.launch {
+            repository.insertDateTime(timestamp)
+        }
+    }
+
+    fun deleteDateTimeFromDay(day: Int) {
+        val year = _selectedYear.value
+        val month = _selectedMonth.value
+        val localDateToRemove = LocalDate.of(year, month, day)
+
+        viewModelScope.launch {
+            // Find the first matching DateTimeEntity for the given day
+            val dateTimeToRemove = _allDateTimes.value
+                .firstOrNull { dateTime ->
+                    LocalDate.parse(dateTime.timestamp, formatter).let { date ->
+                        date.year == year && date.monthValue == month && date.dayOfMonth == day
+                    }
+                }
+
+            // If a matching DateTimeEntity is found, delete it
+            dateTimeToRemove?.let { dateTime ->
+                repository.deleteDateTime(dateTime)
+            }
+        }
     }
 }
