@@ -1,5 +1,7 @@
 package nl.daanbrocatus.alccal.screens.stats
 
+import androidx.compose.animation.animateColorAsState
+import androidx.compose.animation.core.animateIntAsState
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -106,6 +108,14 @@ fun DayCard(day: Int, count: Int) {
         0xFFFF0000
     )
 
+    val targetColor: Color = when (count) {
+        0 -> MaterialTheme.colorScheme.primary
+        in 1..8 -> Color(heatMapColorCodes[count - 1])
+        else -> Color(heatMapColorCodes.last())
+    }
+    val animatedColor by animateColorAsState(targetColor, label = "color")
+    val animatedCount by animateIntAsState(count, label = "count")
+
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -116,15 +126,9 @@ fun DayCard(day: Int, count: Int) {
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
-            val color: Color = when (count) {
-                0 -> MaterialTheme.colorScheme.primary
-                in 1..8 -> Color(heatMapColorCodes[count - 1])
-                else -> Color(heatMapColorCodes.last())
-            }
-
             Card(
                 colors = CardDefaults.cardColors()
-                    .copy(containerColor = color),
+                    .copy(containerColor = animatedColor),
                 modifier = Modifier
                     .size(48.dp)
             ) {
@@ -142,7 +146,7 @@ fun DayCard(day: Int, count: Int) {
 
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Text(
-                    text = count.toString(),
+                    text = animatedCount.toString(),
                     modifier = Modifier.padding(start = 16.dp, end = 8.dp),
                     fontSize = MaterialTheme.typography.titleLarge.fontSize
                 )
